@@ -3,6 +3,23 @@ require("@nomiclabs/hardhat-etherscan")
 require("hardhat-contract-sizer")
 require('@typechain/hardhat')
 
+const fs = require("fs")
+
+const envPath = "./env.json"
+const envSamplePath = "./env.json.sample"
+
+let envRaw = "{}"
+if (fs.existsSync(envPath)) {
+  envRaw = fs.readFileSync(envPath, "utf8")
+} else if (fs.existsSync(envSamplePath)) {
+  console.warn("env.json not found, using env.json.sample")
+  envRaw = fs.readFileSync(envSamplePath, "utf8")
+} else {
+  console.warn("No env configuration file found; using empty defaults")
+}
+
+const env = JSON.parse(envRaw)
+
 const {
   // BSC_URL,
   // BSC_DEPLOY_KEY,
@@ -25,7 +42,7 @@ const {
   // POLYGON_URL,
   // MAINNET_URL,
   // MAINNET_DEPLOY_KEY
-} = require("./env.json")
+} = env
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
