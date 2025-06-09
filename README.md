@@ -25,3 +25,9 @@ The configuration will fall back to `env.json.sample` if `env.json` is missing.
 
 ## Run Tests
 `npx hardhat test`
+
+
+See `docs/DEVELOPER_GUIDE.md` for development notes.
+Additional documentation can be found in `docs/SMART_CONTRACT_OVERVIEW.md`.
+Deployment instructions live in `docs/DEPLOYMENT_GUIDE.md` and a
+full list of contracts is provided in `docs/CONTRACTS_REFERENCE.md`.
