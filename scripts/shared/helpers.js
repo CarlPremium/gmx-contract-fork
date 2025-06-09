@@ -118,9 +118,9 @@ async function deployContract(name, args, label, options) {
     contract = await contractFactory.deploy(...args)
   }
   const argStr = args.map((i) => `"${i}"`).join(" ")
-  console.info(`Deploying ${info} ${contract.address} ${argStr}`)
+  console.info(`Deploying ${info} with args ${argStr}`)
   await contract.deployTransaction.wait()
-  console.info("... Completed!")
+  console.info(`... Completed deployment of ${info} at ${contract.address}`)
   return contract
 }
 
