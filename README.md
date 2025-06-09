@@ -13,6 +13,10 @@ Install packages:
 ### Environment configuration
 Copy `env.json.sample` to `env.json` and update any network URLs or keys as needed for local development. The sample values point to a local Hardhat node and use a dummy private key. `env.json` is ignored by git so your keys remain private.
 
+Deployment scripts use token metadata from `scripts/core/tokens.js`. Only a few
+networks are preconfigured. Add a section there if you wish to deploy on another
+chain.
+
 ### Build prerequisites
 Use a recent LTS version of Node.js (v18 or newer is recommended). If your environment uses an HTTP proxy, Hardhat may fail to download compilers. Removing the `http_proxy` and `https_proxy` variables fixes the issue.
 

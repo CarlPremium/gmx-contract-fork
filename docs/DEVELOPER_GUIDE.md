@@ -18,3 +18,13 @@ Run `npx hardhat test` to execute the test suite. Tests require successful compi
 ### Troubleshooting
 If compilation fails with `HH502` errors, ensure your network connection allows access to `solc-bin`. You may also try setting `HARDHAT_SKIP_COMPILER_DOWNLOAD=false` and running behind a direct internet connection.
 
+### Deployment basics
+Deployment scripts live under the `scripts/` folder. They expect token
+definitions for the target network in `scripts/core/tokens.js`. Only a handful
+of networks are included (BSC, testnet, arbitrumTestnet, arbitrum and avax). Add
+your own entry if deploying elsewhere and run for example:
+
+```bash
+npx hardhat run scripts/core/deployVault.js --network arbitrumTestnet
+```
+

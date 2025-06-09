@@ -5,6 +5,11 @@ const { errors } = require("../../test/core/Vault/helpers")
 
 const network = (process.env.HARDHAT_NETWORK || 'goerli');
 const tokens = require('./tokens')[network];
+if (!tokens) {
+  throw new Error(
+    `Token configuration missing for network "${network}" in scripts/core/tokens.js`
+  );
+}
 
 async function main() {
   const { nativeToken } = tokens

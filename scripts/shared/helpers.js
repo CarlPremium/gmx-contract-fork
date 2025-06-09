@@ -8,6 +8,19 @@ const ARBITRUM = 42161
 const AVALANCHE = 43114
 const GOERLI = 5
 
+const envPath = path.resolve(__dirname, '../../env.json')
+const envSamplePath = path.resolve(__dirname, '../../env.json.sample')
+
+let envRaw = '{}'
+if (fs.existsSync(envPath)) {
+  envRaw = fs.readFileSync(envPath, 'utf8')
+} else if (fs.existsSync(envSamplePath)) {
+  console.warn('env.json not found, using env.json.sample')
+  envRaw = fs.readFileSync(envSamplePath, 'utf8')
+} else {
+  console.warn('No env configuration file found; using empty defaults')
+}
+
 const {
   ARBITRUM_URL,
   AVAX_URL,
@@ -15,7 +28,7 @@ const {
   AVAX_DEPLOY_KEY,
   GOERLI_URL,
   GOERLI_DEPLOY_KEY
-} = require("../../env.json")
+} = JSON.parse(envRaw)
 
 const providers = {
   goerli: new ethers.providers.JsonRpcProvider(GOERLI_URL),
@@ -23,10 +36,18 @@ const providers = {
   avax: new ethers.providers.JsonRpcProvider(AVAX_URL)
 }
 
-const signers = {
-  goerli: new ethers.Wallet(GOERLI_DEPLOY_KEY).connect(providers.goerli),
-  arbitrum: new ethers.Wallet(ARBITRUM_DEPLOY_KEY).connect(providers.arbitrum),
-  avax: new ethers.Wallet(ARBITRUM_DEPLOY_KEY).connect(providers.avax)
+function createWallet(key, provider) {
+  if (!key || /^0x0+$/.test(key)) {
+    throw new Error('Deployment key not configured for this network')
+  }
+  return new ethers.Wallet(key).connect(provider)
+}
+
+function getSigner() {
+  if (network === 'goerli') return createWallet(GOERLI_DEPLOY_KEY, providers.goerli)
+  if (network === 'arbitrum') return createWallet(ARBITRUM_DEPLOY_KEY, providers.arbitrum)
+  if (network === 'avax') return createWallet(AVAX_DEPLOY_KEY, providers.avax)
+  throw new Error(`Unsupported network ${network}`)
 }
 
 function sleep(ms) {
@@ -189,7 +210,7 @@ module.exports = {
   AVALANCHE,
   GOERLI,
   providers,
-  signers,
+  getSigner,
   readCsv,
   getFrameSigner,
   sendTxn,
